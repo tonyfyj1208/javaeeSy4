@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>设备管理 - 设备资产管理系统</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'管理员, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/admin/home}">首页</a>
+            <a th:href="@{/admin/users}">用户管理</a>
+            <a th:href="@{/admin/devices}">设备管理</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="action-bar">
+                <h3>设备列表</h3>
+                <a class="btn btn-sm" th:href="@{/admin/device/toAdd}">+ 添加设备</a>
+            </div>
+            <form style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+                <div class="form-group" style="margin:0;">
+                    <label>设备名称</label>
+                    <input type="text" name="name" th:value="${name}" placeholder="模糊查询" style="width:140px;" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label>领用人登录名</label>
+                    <input type="text" name="loginName" th:value="${loginName}" placeholder="精确查询" style="width:140px;" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label>领用人姓名</label>
+                    <input type="text" name="userName" th:value="${userName}" placeholder="模糊查询" style="width:140px;" />
+                </div>
+                <button class="btn btn-sm" type="submit">查询</button>
+            </form>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>编码</th><th>名称</th><th>描述</th><th>领用人</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${devices}">
+                        <td th:text="${d.id}"></td>
+                        <td th:text="${d.code}"></td>
+                        <td th:text="${d.name}"></td>
+                        <td th:text="${d.description}"></td>
+                        <td th:text="${d.user?.name}"></td>
+                        <td>
+                            <a class="btn btn-sm" th:href="@{'/admin/device/toEdit?id=' + ${d.id}}">修改</a>
+                            <a class="btn btn-sm" th:href="@{'/admin/device/recycle?id=' + ${d.id}}">回收</a>
+                            <a class="btn btn-sm" th:href="@{'/admin/device/delete?id=' + ${d.id}}"
+                               onclick="return confirm('确定删除该设备？')">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="empty" th:if="${#lists.isEmpty(devices)}">暂无设备</div>
+        </div>
+    </div>
+</body>
+</html>

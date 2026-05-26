@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${device != null} ? '修改设备' : '添加设备'"></title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'管理员, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/admin/devices}">设备管理</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" style="max-width:500px;">
+            <h3 th:text="${device != null} ? '修改设备' : '添加设备'"></h3>
+            <form th:action="${device != null} ? @{/admin/device/edit} : @{/admin/device/add}" method="post">
+                <input type="hidden" name="id" th:value="${device?.id}" />
+                <div class="form-group">
+                    <label>设备编码</label>
+                    <input type="text" name="code" th:value="${device?.code}" required />
+                </div>
+                <div class="form-group">
+                    <label>设备名称</label>
+                    <input type="text" name="name" th:value="${device?.name}" required />
+                </div>
+                <div class="form-group">
+                    <label>设备描述</label>
+                    <textarea name="description" th:text="${device?.description}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>领用人</label>
+                    <select name="userId">
+                        <option value="">-- 不指定 --</option>
+                        <option th:each="u : ${allUsers}"
+                                th:value="${u.id}"
+                                th:text="${u.name}"
+                                th:selected="${device != null && device.userId == u.id}"></option>
+                    </select>
+                </div>
+                <button class="btn" type="submit" th:text="${device != null} ? '保存' : '添加'"></button>
+                <a class="btn" th:href="@{/admin/devices}">返回</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

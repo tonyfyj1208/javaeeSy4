@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'欢迎, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/user/home}">我的设备</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" style="max-width:500px;">
+            <h3>修改个人信息</h3>
+            <form th:action="@{/user/editProfile}" method="post">
+                <div class="form-group">
+                    <label>登录名</label>
+                    <input type="text" th:value="${session.loginUser.loginName}" disabled style="background:#f5f5f5;" />
+                </div>
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" name="name" th:value="${session.loginUser.name}" required />
+                </div>
+                <div class="form-group">
+                    <label>电话</label>
+                    <input type="text" name="phone" th:value="${session.loginUser.phone}" />
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" name="email" th:value="${session.loginUser.email}" />
+                </div>
+                <button class="btn" type="submit">保存</button>
+                <a class="btn" th:href="@{/user/home}">返回</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

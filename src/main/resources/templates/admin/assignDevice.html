@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>配置设备领用人</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'管理员, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/admin/home}">首页</a>
+            <a th:href="@{/admin/users}">用户管理</a>
+            <a th:href="@{/admin/devices}">设备管理</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card" style="max-width:500px;">
+            <h3>配置设备领用人</h3>
+            <form th:action="@{/admin/device/assign}" method="post">
+                <div class="form-group">
+                    <label>设备</label>
+                    <select name="deviceId" required>
+                        <option value="">-- 选择设备 --</option>
+                        <option th:each="d : ${devices}"
+                                th:value="${d.id}"
+                                th:text="${d.code} + ' - ' + ${d.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>领用人</label>
+                    <select name="userId" required>
+                        <option value="">-- 选择用户 --</option>
+                        <option th:each="u : ${allUsers}"
+                                th:value="${u.id}"
+                                th:text="${u.loginName} + ' - ' + ${u.name}"></option>
+                    </select>
+                </div>
+                <button class="btn" type="submit">配置</button>
+                <a class="btn" th:href="@{/admin/home}">返回</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

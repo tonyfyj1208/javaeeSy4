@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy4.mapper.DeviceMapper">
+
+    <resultMap id="deviceMap" type="Device">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="user_id" property="userId" />
+        <association property="user" javaType="User">
+            <id column="uid" property="id" />
+            <result column="login_name" property="loginName" />
+            <result column="uname" property="name" />
+        </association>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="deviceMap">
+        SELECT d.*, u.id AS uid, u.login_name, u.name AS uname
+        FROM device d LEFT JOIN user u ON d.user_id = u.id
+        WHERE d.user_id = #{userId}
+    </select>
+
+    <select id="findAll" resultMap="deviceMap">
+        SELECT d.*, u.id AS uid, u.login_name, u.name AS uname
+        FROM device d LEFT JOIN user u ON d.user_id = u.id
+        ORDER BY d.id
+    </select>
+
+    <select id="findById" resultMap="deviceMap">
+        SELECT d.*, u.id AS uid, u.login_name, u.name AS uname
+        FROM device d LEFT JOIN user u ON d.user_id = u.id
+        WHERE d.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO device(code, name, description, user_id)
+        VALUES(#{code}, #{name}, #{description}, #{userId})
+    </insert>
+
+    <update id="update">
+        UPDATE device SET code = #{code}, name = #{name}, description = #{description}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserId">
+        UPDATE device SET user_id = #{userId} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM device WHERE id = #{id}
+    </delete>
+
+    <select id="search" resultMap="deviceMap">
+        SELECT d.*, u.id AS uid, u.login_name, u.name AS uname
+        FROM device d LEFT JOIN user u ON d.user_id = u.id
+        <where>
+            <if test="name != null and name != ''">
+                d.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="loginName != null and loginName != ''">
+                AND u.login_name = #{loginName}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.name LIKE CONCAT('%', #{userName}, '%')
+            </if>
+        </where>
+        ORDER BY d.id
+    </select>
+
+</mapper>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员首页 - 设备资产管理系统</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'管理员, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/admin/home}">首页</a>
+            <a th:href="@{/admin/users}">用户管理</a>
+            <a th:href="@{/admin/devices}">设备管理</a>
+            <a th:href="@{/admin/device/assign}">配置领用人</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h3>所有设备资产</h3>
+            <table>
+                <thead>
+                    <tr><th>编码</th><th>名称</th><th>描述</th><th>领用人</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${devices}">
+                        <td th:text="${d.code}"></td>
+                        <td th:text="${d.name}"></td>
+                        <td th:text="${d.description}"></td>
+                        <td th:text="${d.user?.name}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

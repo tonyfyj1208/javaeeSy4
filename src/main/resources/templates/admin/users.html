@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理 - 设备资产管理系统</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'管理员, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/admin/home}">首页</a>
+            <a th:href="@{/admin/users}">用户管理</a>
+            <a th:href="@{/admin/devices}">设备管理</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="action-bar">
+                <h3>用户列表</h3>
+                <a class="btn btn-sm" th:href="@{/admin/user/toAdd}">+ 添加用户</a>
+            </div>
+            <form style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+                <div class="form-group" style="margin:0;">
+                    <label>姓名</label>
+                    <input type="text" name="name" th:value="${name}" placeholder="模糊查询" style="width:140px;" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label>电话</label>
+                    <input type="text" name="phone" th:value="${phone}" placeholder="精确查询" style="width:140px;" />
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label>类型</label>
+                    <select name="type" style="width:100px;">
+                        <option value="">全部</option>
+                        <option value="0" th:selected="${type == 0}">管理员</option>
+                        <option value="1" th:selected="${type == 1}">普通用户</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm" type="submit">查询</button>
+            </form>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>登录名</th><th>姓名</th><th>电话</th><th>邮箱</th><th>类型</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${users}">
+                        <td th:text="${u.id}"></td>
+                        <td th:text="${u.loginName}"></td>
+                        <td th:text="${u.name}"></td>
+                        <td th:text="${u.phone}"></td>
+                        <td th:text="${u.email}"></td>
+                        <td th:text="${u.type == 0 ? '管理员' : '普通用户'}"></td>
+                        <td>
+                            <a class="btn btn-sm" th:href="@{'/admin/user/toEdit?id=' + ${u.id}}">修改</a>
+                            <a class="btn btn-sm" th:href="@{'/admin/user/delete?id=' + ${u.id}}"
+                               onclick="return confirm('确定删除该用户？')">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="empty" th:if="${#lists.isEmpty(users)}">暂无用户</div>
+        </div>
+    </div>
+</body>
+</html>

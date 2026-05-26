@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的设备 - 设备资产管理系统</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <span class="brand">设备资产管理系统</span>
+        <div class="nav-right">
+            <span th:text="'欢迎, ' + ${session.loginUser.name}"></span>
+            <a th:href="@{/user/home}">我的设备</a>
+            <a th:href="@{/user/toEditProfile}">修改信息</a>
+            <a th:href="@{/user/toChangePassword}">修改密码</a>
+            <a th:href="@{/user/logout}">退出</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h3>我领用的设备</h3>
+            <table>
+                <thead>
+                    <tr><th>编码</th><th>名称</th><th>描述</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${devices}">
+                        <td th:text="${d.code}"></td>
+                        <td th:text="${d.name}"></td>
+                        <td th:text="${d.description}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="empty" th:if="${#lists.isEmpty(devices)}">暂无领用设备</div>
+        </div>
+    </div>
+</body>
+</html>
